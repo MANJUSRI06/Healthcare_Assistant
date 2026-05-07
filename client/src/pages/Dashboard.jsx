@@ -3,8 +3,9 @@ import { AuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import { motion } from 'framer-motion';
-import { Activity, Plus, TrendingUp, AlertTriangle, ShieldCheck, Heart, Moon, Flame, FileText } from 'lucide-react';
+import { Activity, Plus, TrendingUp, AlertTriangle, ShieldCheck, Heart, Moon, Flame, FileText, Navigation, ShieldAlert, Calendar } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell } from 'recharts';
+import { useTranslation } from 'react-i18next';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -21,6 +22,7 @@ const itemVariants = {
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
+  const { t } = useTranslation();
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
@@ -63,14 +65,14 @@ const Dashboard = () => {
         <div>
           <motion.div variants={itemVariants} className="inline-flex items-center bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-3">
             <span className="w-2 h-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span>
-            Live Data Feed
+            {t("dashboard.liveFeed")}
           </motion.div>
-          <motion.h1 variants={itemVariants} className="text-4xl font-extrabold text-gray-900 tracking-tight">Clinical Dashboard</motion.h1>
-          <motion.p variants={itemVariants} className="text-gray-500 mt-2 text-lg">Welcome back, <span className="font-bold text-gray-900">{user?.name?.split(' ')[0]}</span>. Here's your biological overview.</motion.p>
+          <motion.h1 variants={itemVariants} className="text-4xl font-extrabold text-gray-900 tracking-tight">{t("dashboard.clinicalDashboard")}</motion.h1>
+          <motion.p variants={itemVariants} className="text-gray-500 mt-2 text-lg">{t("dashboard.welcome")}, <span className="font-bold text-gray-900">{user?.name?.split(' ')[0]}</span>. {t("dashboard.biologicalOverview")}</motion.p>
         </div>
         <motion.div variants={itemVariants}>
           <Link to="/predict" className="premium-gradient-bg text-white px-6 py-3.5 rounded-2xl font-bold hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 flex items-center group">
-            <Plus className="w-5 h-5 mr-2 group-hover:rotate-90 transition-transform" /> New Assessment
+            <Plus className="w-5 h-5 mr-2 group-hover:rotate-90 transition-transform" /> {t("dashboard.newAssessment")}
           </Link>
         </motion.div>
       </div>
@@ -138,6 +140,23 @@ const Dashboard = () => {
                <span className="text-sm font-extrabold text-gray-800">{latestPrediction.riskPercentage}% Probability</span>
              </div>
           )}
+        </motion.div>
+      </div>
+
+
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <motion.div variants={itemVariants}>
+          <Link to="/appointment-booking" className="group flex flex-col h-full bg-gradient-to-br from-indigo-50 to-indigo-100/50 p-8 rounded-[2rem] border border-indigo-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:scale-110 transition-transform duration-500 text-indigo-500">
+              <Calendar className="w-24 h-24" />
+            </div>
+            <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg shadow-indigo-500/30">
+              <Calendar className="w-7 h-7" />
+            </div>
+            <h3 className="text-2xl font-extrabold text-slate-900 mb-2">{t("dashboard.appointmentBooking")}</h3>
+            <p className="text-slate-600 font-medium z-10 max-w-sm">{t("dashboard.appointmentSystem")}</p>
+          </Link>
         </motion.div>
       </div>
 

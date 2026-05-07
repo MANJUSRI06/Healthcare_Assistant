@@ -13,6 +13,11 @@ const userSchema = new mongoose.Schema(
     bmi: { type: Number },
     profileImage: { type: String, default: "" },
     bloodGroup: { type: String, default: "Not Provided" },
+    languagePreference: {
+      type: String,
+      enum: ["en", "ta", "hi", "te", "ml", "kn"],
+      default: "en"
+    }
   },
   { timestamps: true }
 );

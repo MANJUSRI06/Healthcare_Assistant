@@ -1,0 +1,69 @@
+{
+  "common": {
+    "submit": "जमा करें",
+    "cancel": "रद्द करें",
+    "save": "सेव करें",
+    "loading": "लोड हो रहा है...",
+    "search": "खोजें",
+    "viewDetails": "विवरण देखें",
+    "bookNow": "अभी बुक करें",
+    "directions": "दिशा-निर्देश"
+  },
+  "dashboard": {
+    "title": "AI स्वास्थ्य सहायक",
+    "subtitle": "मरीजों के लिए स्मार्ट स्वास्थ्य सहायता",
+    "healthcareFinder": "अस्पताल खोजक",
+    "emergencySupport": "आपातकालीन सहायता",
+    "appointmentBooking": "अपॉइंटमेंट बुकिंग",
+    "aiChatbot": "AI सहायक",
+    "liveFeed": "लाइव डेटा फ़ीड",
+    "clinicalDashboard": "क्लिनिकल डैशबोर्ड",
+    "welcome": "वापसी पर स्वागत है",
+    "biologicalOverview": "यहाँ आपका जैविक अवलोकन है।",
+    "newAssessment": "नया मूल्यांकन",
+    "appointmentSystem": "AI-सहायता प्राप्त अस्पताल अपॉइंटमेंट प्रणाली"
+  },
+  "healthcareFinder": {
+    "title": "अस्पताल खोजक",
+    "subtitle": "आसपास के अस्पताल और फार्मेसी",
+    "useLocation": "मेरे स्थान का उपयोग करें",
+    "nearbyHospitals": "आसपास के अस्पताल",
+    "nearbyPharmacies": "आसपास की फार्मेसी"
+  },
+  "emergency": {
+    "title": "आपातकालीन सहायता",
+    "subtitle": "त्वरित एम्बुलेंस और स्थान साझाकरण",
+    "holdButton": "आपातकालीन कॉल के लिए दबाए रखें",
+    "tapSpeak": "बोलने के लिए टैप करें",
+    "warning": "इसका उपयोग केवल वास्तविक आपातकालीन स्थितियों में करें।",
+    "call108": "108 पर कॉल करें",
+    "shareLocation": "लाइव लोकेशन साझा करें"
+  },
+  "appointment": {
+    "title": "अपॉइंटमेंट बुकिंग",
+    "subtitle": "AI-सहायता प्राप्त अस्पताल अपॉइंटमेंट प्रणाली",
+    "patientName": "मरीज का नाम",
+    "age": "आयु",
+    "gender": "लिंग",
+    "phone": "फ़ोन नंबर",
+    "symptoms": "लक्षण",
+    "selectHospital": "अस्पताल चुनें",
+    "selectDoctor": "डॉक्टर चुनें",
+    "selectDate": "तारीख चुनें",
+    "selectTime": "समय चुनें",
+    "bookAppointment": "अपॉइंटमेंट बुक करें",
+    "priority": "प्राथमिकता स्तर",
+    "suggestedDepartment": "सुझाया गया विभाग",
+    "aiAssist": "AI-सहायता प्राप्त शेड्यूलिंग",
+    "describe": "अपने लक्षणों का वर्णन करें। हमारा AI आपको सही विभाग में मार्गदर्शन करेगा और तत्काल मामलों को प्राथमिकता देगा।"
+  },
+  "chatbot": {
+    "title": "मेडिगाइड AI",
+    "placeholder": "अपना स्वास्थ्य प्रश्न पूछें...",
+    "quickSymptoms": "मुझे लक्षण हैं",
+    "quickAppointment": "अपॉइंटमेंट बुक करें",
+    "quickHospital": "आसपास के अस्पताल खोजें",
+    "quickEmergency": "आपातकालीन मदद",
+    "disclaimer": "यह सामान्य मार्गदर्शन है, चिकित्सा निदान नहीं।"
+  }
+}

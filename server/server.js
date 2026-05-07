@@ -16,6 +16,11 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/user", require("./routes/userRoutes"));
 app.use("/api/predictions", require("./routes/predictionRoutes"));
+app.use("/api/emergency", require("./routes/emergencyRoutes"));
+app.use("/api/appointments", require("./routes/appointmentRoutes"));
+app.use("/api/doctors", require("./routes/doctorRoutes"));
+app.use("/api/hospitals", require("./routes/hospitalRoutes"));
+app.use("/api/chatbot", require("./routes/chatbotRoutes"));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -1,0 +1,69 @@
+{
+  "common": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "loading": "Loading...",
+    "search": "Search",
+    "viewDetails": "View Details",
+    "bookNow": "Book Now",
+    "directions": "Directions"
+  },
+  "dashboard": {
+    "title": "AI Healthcare Assistant",
+    "subtitle": "Smart health support for patients",
+    "healthcareFinder": "Healthcare Finder",
+    "emergencySupport": "Emergency Support",
+    "appointmentBooking": "Appointment Booking",
+    "aiChatbot": "AI Chatbot",
+    "liveFeed": "Live Data Feed",
+    "clinicalDashboard": "Clinical Dashboard",
+    "welcome": "Welcome back",
+    "biologicalOverview": "Here's your biological overview.",
+    "newAssessment": "New Assessment",
+    "appointmentSystem": "AI-assisted hospital appointment system"
+  },
+  "healthcareFinder": {
+    "title": "Healthcare Finder",
+    "subtitle": "Nearby pharmacy & hospital locator",
+    "useLocation": "Use My Location",
+    "nearbyHospitals": "Nearby Hospitals",
+    "nearbyPharmacies": "Nearby Pharmacies"
+  },
+  "emergency": {
+    "title": "Emergency Support",
+    "subtitle": "Quick ambulance and location sharing support",
+    "holdButton": "Hold for Emergency Call",
+    "tapSpeak": "Tap and Speak",
+    "warning": "Use this only during real emergency situations.",
+    "call108": "Call 108",
+    "shareLocation": "Share Live Location"
+  },
+  "appointment": {
+    "title": "Appointment Booking",
+    "subtitle": "AI-assisted hospital appointment system",
+    "patientName": "Patient Name",
+    "age": "Age",
+    "gender": "Gender",
+    "phone": "Phone Number",
+    "symptoms": "Symptoms",
+    "selectHospital": "Select Hospital",
+    "selectDoctor": "Select Doctor",
+    "selectDate": "Select Date",
+    "selectTime": "Select Time",
+    "bookAppointment": "Book Appointment",
+    "priority": "Priority Level",
+    "suggestedDepartment": "Suggested Department",
+    "aiAssist": "AI-Assisted Scheduling",
+    "describe": "Describe your symptoms naturally. Our AI will guide you to the right department and prioritize urgent cases."
+  },
+  "chatbot": {
+    "title": "MediGuide AI",
+    "placeholder": "Ask your health question...",
+    "quickSymptoms": "I have symptoms",
+    "quickAppointment": "Book appointment",
+    "quickHospital": "Find nearby hospital",
+    "quickEmergency": "Emergency help",
+    "disclaimer": "This is general guidance, not a medical diagnosis."
+  }
+}

@@ -1,16 +1,22 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, FileText, ActivitySquare, MessageSquare, Settings, LogOut, Activity } from 'lucide-react';
+import { LayoutDashboard, FileText, ActivitySquare, MessageSquare, Settings, LogOut, Activity, Navigation, ShieldAlert, Calendar } from 'lucide-react';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from './LanguageSelector';
 
 const Sidebar = () => {
   const location = useLocation();
   const { user, logout } = useContext(AuthContext);
+  const { t } = useTranslation();
 
   const navItems = [
-    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { name: 'Assessments', path: '/predict', icon: ActivitySquare },
+    { name: t('dashboard.clinicalDashboard'), path: '/dashboard', icon: LayoutDashboard },
+    { name: t('dashboard.newAssessment') || 'Assessments', path: '/predict', icon: ActivitySquare },
+    { name: t('appointment.title'), path: '/appointment-booking', icon: Calendar },
+    { name: t('healthcareFinder.title'), path: '/healthcare-finder', icon: Navigation },
+    { name: t('emergency.title'), path: '/emergency-support', icon: ShieldAlert },
     { name: 'Health Tips', path: '/tips', icon: FileText },
     { name: 'Profile', path: '/profile', icon: Settings },
   ];
@@ -49,9 +55,10 @@ const Sidebar = () => {
         </nav>
       </div>
 
-      <div className="px-6">
-        <div className="bg-white/60 backdrop-blur-md p-4 rounded-2xl border border-white shadow-sm mb-4 flex items-center hover:bg-white transition-colors cursor-pointer group">
-          <div className="w-12 h-12 premium-gradient-bg text-white rounded-full flex items-center justify-center font-bold text-xl mr-3 shadow-md group-hover:scale-105 transition-transform">
+      <div className="px-6 flex flex-col gap-3">
+        <LanguageSelector />
+        <div className="bg-white/60 backdrop-blur-md p-4 rounded-2xl border border-white shadow-sm flex items-center hover:bg-white transition-colors cursor-pointer group">
+          <div className="w-10 h-10 premium-gradient-bg text-white rounded-full flex items-center justify-center font-bold text-lg mr-3 shadow-md group-hover:scale-105 transition-transform shrink-0">
             {user?.name?.charAt(0) || 'U'}
           </div>
           <div className="overflow-hidden">

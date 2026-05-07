@@ -1,0 +1,69 @@
+{
+  "common": {
+    "submit": "ಸಲ್ಲಿಸಿ",
+    "cancel": "ರದ್ದುಮಾಡಿ",
+    "save": "ಉಳಿಸಿ",
+    "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+    "search": "ಹುಡುಕಿ",
+    "viewDetails": "ವಿವರಗಳನ್ನು ನೋಡಿ",
+    "bookNow": "ಈಗ ಬುಕ್ ಮಾಡಿ",
+    "directions": "ನಿರ್ದೇಶನಗಳು"
+  },
+  "dashboard": {
+    "title": "AI ಆರೋಗ್ಯ ಸಹಾಯಕ",
+    "subtitle": "ರೋಗಿಗಳಿಗೆ ಸ್ಮಾರ್ಟ್ ಆರೋಗ್ಯ ಬೆಂಬಲ",
+    "healthcareFinder": "ಆಸ್ಪತ್ರೆ ಹುಡುಕಾಟ",
+    "emergencySupport": "ತುರ್ತು ಬೆಂಬಲ",
+    "appointmentBooking": "ಅಪಾಯಿಂಟ್ಮೆಂಟ್ ಬುಕಿಂಗ್",
+    "aiChatbot": "AI ಸಹಾಯಕ",
+    "liveFeed": "ಲೈವ್ ಡೇಟಾ",
+    "clinicalDashboard": "ಕ್ಲಿನಿಕಲ್ ಡ್ಯಾಶ್ಬೋರ್ಡ್",
+    "welcome": "ಮರಳಿ ಸ್ವಾಗತ",
+    "biologicalOverview": "ನಿಮ್ಮ ಜೈವಿಕ ಅವಲೋಕನ ಇಲ್ಲಿದೆ.",
+    "newAssessment": "ಹೊಸ ಮೌಲ್ಯಮಾಪನ",
+    "appointmentSystem": "AI ಬೆಂಬಲಿತ ಆಸ್ಪತ್ರೆ ಅಪಾಯಿಂಟ್ಮೆಂಟ್ ಸಿಸ್ಟಮ್"
+  },
+  "healthcareFinder": {
+    "title": "ಆಸ್ಪತ್ರೆ ಹುಡುಕಾಟ",
+    "subtitle": "ಹತ್ತಿರದ ಫಾರ್ಮಸಿ ಮತ್ತು ಆಸ್ಪತ್ರೆ",
+    "useLocation": "ನನ್ನ ಸ್ಥಳವನ್ನು ಬಳಸಿ",
+    "nearbyHospitals": "ಹತ್ತಿರದ ಆಸ್ಪತ್ರೆಗಳು",
+    "nearbyPharmacies": "ಹತ್ತಿರದ ಫಾರ್ಮಸಿಗಳು"
+  },
+  "emergency": {
+    "title": "ತುರ್ತು ಬೆಂಬಲ",
+    "subtitle": "ತ್ವರಿತ ಆಂಬ್ಯುಲೆನ್ಸ್ ಮತ್ತು ಸ್ಥಳ ಹಂಚಿಕೆ",
+    "holdButton": "ತುರ್ತು ಕರೆಗಾಗಿ ಹಿಡಿದಿಟ್ಟುಕೊಳ್ಳಿ",
+    "tapSpeak": "ಮಾತನಾಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ",
+    "warning": "ನಿಜವಾದ ತುರ್ತು ಪರಿಸ್ಥಿತಿಗಳಲ್ಲಿ ಮಾತ್ರ ಇದನ್ನು ಬಳಸಿ.",
+    "call108": "108 ಗೆ ಕರೆ ಮಾಡಿ",
+    "shareLocation": "ಲೈವ್ ಸ್ಥಳವನ್ನು ಹಂಚಿಕೊಳ್ಳಿ"
+  },
+  "appointment": {
+    "title": "ಅಪಾಯಿಂಟ್ಮೆಂಟ್ ಬುಕಿಂಗ್",
+    "subtitle": "AI ಬೆಂಬಲಿತ ಆಸ್ಪತ್ರೆ ಅಪಾಯಿಂಟ್ಮೆಂಟ್ ಸಿಸ್ಟಮ್",
+    "patientName": "ರೋಗಿಯ ಹೆಸರು",
+    "age": "ವಯಸ್ಸು",
+    "gender": "ಲಿಂಗ",
+    "phone": "ಫೋನ್ ಸಂಖ್ಯೆ",
+    "symptoms": "ಲಕ್ಷಣಗಳು",
+    "selectHospital": "ಆಸ್ಪತ್ರೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    "selectDoctor": "ವೈದ್ಯರನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    "selectDate": "ದಿನಾಂಕವನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    "selectTime": "ಸಮಯವನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    "bookAppointment": "ಅಪಾಯಿಂಟ್ಮೆಂಟ್ ಬುಕ್ ಮಾಡಿ",
+    "priority": "ಆದ್ಯತೆಯ ಮಟ್ಟ",
+    "suggestedDepartment": "ಸೂಚಿಸಿದ ವಿಭಾಗ",
+    "aiAssist": "AI-ನೆರವಿನ ವೇಳಾಪಟ್ಟಿ",
+    "describe": "ನಿಮ್ಮ ಲಕ್ಷಣಗಳನ್ನು ವಿವರಿಸಿ. ನಮ್ಮ AI ನಿಮ್ಮನ್ನು ಸರಿಯಾದ ವಿಭಾಗಕ್ಕೆ ಮಾರ್ಗದರ್ಶನ ಮಾಡುತ್ತದೆ."
+  },
+  "chatbot": {
+    "title": "ಮೆಡಿಗೈಡ್ AI",
+    "placeholder": "ನಿಮ್ಮ ಆರೋಗ್ಯದ ಪ್ರಶ್ನೆಯನ್ನು ಕೇಳಿ...",
+    "quickSymptoms": "ನನಗೆ ಲಕ್ಷಣಗಳಿವೆ",
+    "quickAppointment": "ಅಪಾಯಿಂಟ್ಮೆಂಟ್ ಬುಕ್ ಮಾಡಿ",
+    "quickHospital": "ಹತ್ತಿರದ ಆಸ್ಪತ್ರೆಯನ್ನು ಹುಡುಕಿ",
+    "quickEmergency": "ತುರ್ತು ಸಹಾಯ",
+    "disclaimer": "ಇದು ಸಾಮಾನ್ಯ ಮಾರ್ಗದರ್ಶನ, ವೈದ್ಯಕೀಯ ರೋಗನಿರ್ಣಯವಲ್ಲ."
+  }
+}

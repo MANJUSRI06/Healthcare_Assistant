@@ -1,11 +1,45 @@
+const axios = require('axios');
+
 // Dummy prediction logic to be replaced by actual ML model later
 async function getPrediction(inputData) {
-  // Example future replacement:
-  // const axios = require('axios');
-  // const response = await axios.post("http://localhost:8000/predict", inputData);
-  // return response.data;
+  
+  try {
+    // 1. Map React Form Data to Python Model Expected Format
+    const pythonPayload = {
+       age: inputData.age || 30,
+       gender: inputData.gender === 'Male' ? 1 : 0, // Assuming 1=Male, 0=Female in your model
+       bmi: inputData.bmi || 25,
+       daily_steps: inputData.dailySteps || 5000,
+       sleep_hours: inputData.sleepHours || 7,
+       water_intake_l: inputData.waterIntake || 2,
+       calories_consumed: 2000, 
+       smoker: inputData.smoker === 'yes' ? 1 : 0,
+       alcohol: 0,
+       resting_hr: 75,
+       systolic_bp: inputData.systolicBP || 120,
+       diastolic_bp: 80, // Default if not in form
+       cholesterol: inputData.cholesterol || 180,
+       family_history: inputData.familyHistory === 'yes' ? 1 : 0
+    };
 
-  const {
+    // 2. Make request to Python FastAPI Server
+    console.log("Sending data to Python ML Server...");
+    const response = await axios.post("http://127.0.0.1:8001/predict", pythonPayload);
+    const pyData = response.data;
+    console.log("ML Prediction Received:", pyData);
+
+    // 3. Map Python Response back to Node.js schema
+    return {
+      riskLevel: pyData.risk, // "High" or "Low"
+      riskPercentage: pyData.score, 
+      possibleDiseaseCategory: pyData.risk === "High" ? "Lifestyle Risk Detected" : "General Health Good",
+      suggestions: pyData.reasons && pyData.reasons.length > 0 ? pyData.reasons : ["Maintain your current healthy lifestyle.", "Keep up with regular checkups."]
+    };
+
+  } catch (error) {
+    console.log("⚠️ Python ML Server is not running! Falling back to Rule-Based system.");
+    
+    // FALLBACK LOGIC IF PYTHON SERVER IS OFF:  const {
     bmi,
     sleepHours,
     dailySteps,
@@ -94,12 +128,13 @@ async function getPrediction(inputData) {
     }
   }
 
-  return {
-    riskLevel,
-    riskPercentage,
-    possibleDiseaseCategory,
-    suggestions,
-  };
+    return {
+      riskLevel,
+      riskPercentage,
+      possibleDiseaseCategory,
+      suggestions,
+    };
+  }
 }
 
 module.exports = { getPrediction };

@@ -1,0 +1,69 @@
+{
+  "common": {
+    "submit": "సమర్పించు",
+    "cancel": "రద్దు చేయి",
+    "save": "సేవ్ చేయి",
+    "loading": "లోడ్ అవుతోంది...",
+    "search": "శోధించు",
+    "viewDetails": "వివరాలు చూడు",
+    "bookNow": "ఇప్పుడే బుక్ చేయి",
+    "directions": "దిశలు"
+  },
+  "dashboard": {
+    "title": "AI ఆరోగ్య సహాయకుడు",
+    "subtitle": "రోగులకు స్మార్ట్ ఆరోగ్య మద్దతు",
+    "healthcareFinder": "ఆసుపత్రి శోధన",
+    "emergencySupport": "అత్యవసర సహాయం",
+    "appointmentBooking": "అపాయింట్మెంట్ బుకింగ్",
+    "aiChatbot": "AI సహాయకుడు",
+    "liveFeed": "లైవ్ డేటా",
+    "clinicalDashboard": "క్లినికల్ డాష్బోర్డ్",
+    "welcome": "తిరిగి స్వాగతం",
+    "biologicalOverview": "ఇది మీ జీవశాస్త్ర అవలోకనం.",
+    "newAssessment": "కొత్త అంచనా",
+    "appointmentSystem": "AI మద్దతుతో ఆసుపత్రి అపాయింట్మెంట్ సిస్టమ్"
+  },
+  "healthcareFinder": {
+    "title": "ఆసుపత్రి శోధన",
+    "subtitle": "సమీప ఫార్మసీ & ఆసుపత్రి",
+    "useLocation": "నా లొకేషన్‌ను ఉపయోగించు",
+    "nearbyHospitals": "సమీప ఆసుపత్రులు",
+    "nearbyPharmacies": "సమీప ఫార్మసీలు"
+  },
+  "emergency": {
+    "title": "అత్యవసర సహాయం",
+    "subtitle": "శీఘ్ర అంబులెన్స్ మరియు లొకేషన్ షేరింగ్",
+    "holdButton": "అత్యవసర కాల్ కోసం పట్టుకోండి",
+    "tapSpeak": "మాట్లాడటానికి నొక్కండి",
+    "warning": "నిజమైన అత్యవసర పరిస్థితుల్లో మాత్రమే దీనిని ఉపయోగించండి.",
+    "call108": "108 కు కాల్ చేయండి",
+    "shareLocation": "లైవ్ లొకేషన్ షేర్ చేయండి"
+  },
+  "appointment": {
+    "title": "అపాయింట్మెంట్ బుకింగ్",
+    "subtitle": "AI మద్దతుతో ఆసుపత్రి అపాయింట్మెంట్ సిస్టమ్",
+    "patientName": "రోగి పేరు",
+    "age": "వయస్సు",
+    "gender": "లింగం",
+    "phone": "ఫోన్ నంబర్",
+    "symptoms": "లక్షణాలు",
+    "selectHospital": "ఆసుపత్రిని ఎంచుకోండి",
+    "selectDoctor": "డాక్టర్‌ను ఎంచుకోండి",
+    "selectDate": "తేదీని ఎంచుకోండి",
+    "selectTime": "సమయం ఎంచుకోండి",
+    "bookAppointment": "అపాయింట్మెంట్ బుక్ చేయండి",
+    "priority": "ప్రాధాన్యత స్థాయి",
+    "suggestedDepartment": "సూచించిన విభాగం",
+    "aiAssist": "AI-సహాయక షెడ్యూలింగ్",
+    "describe": "మీ లక్షణాలను సహజంగా వివరించండి. మా AI మిమ్మల్ని సరైన విభాగానికి మార్గనిర్దేశం చేస్తుంది."
+  },
+  "chatbot": {
+    "title": "మెడిగైడ్ AI",
+    "placeholder": "మీ ఆరోగ్య ప్రశ్న అడగండి...",
+    "quickSymptoms": "నాకు లక్షణాలు ఉన్నాయి",
+    "quickAppointment": "అపాయింట్మెంట్ బుక్ చేయి",
+    "quickHospital": "సమీప ఆసుపత్రిని కనుగొనండి",
+    "quickEmergency": "అత్యవసర సహాయం",
+    "disclaimer": "ఇది సాధారణ మార్గదర్శకత్వం, వైద్య నిర్ధారణ కాదు."
+  }
+}

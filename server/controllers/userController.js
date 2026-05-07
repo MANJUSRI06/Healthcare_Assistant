@@ -61,4 +61,30 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
-module.exports = { getUserProfile, updateUserProfile };
+const updateLanguage = async (req, res) => {
+  try {
+    const { language } = req.body;
+    
+    if (!["en", "ta", "hi", "te", "ml", "kn"].includes(language)) {
+      return res.status(400).json({ message: "Invalid language code" });
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.languagePreference = language;
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Language preference updated",
+      language: user.languagePreference
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+module.exports = { getUserProfile, updateUserProfile, updateLanguage };
