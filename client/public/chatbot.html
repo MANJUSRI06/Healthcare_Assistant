@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+
+
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Medical AI Assistant Chatbot</title>
+    <link rel="icon" href="data:," />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, rgba(20, 184, 166, 0.45), transparent 35%), radial-gradient(circle at bottom right, rgba(37, 99, 235, 0.45), transparent 35%), linear-gradient(135deg, #064e3b, #0891b2, #2563eb);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        
+        .page-content {
+            color: white;
+            text-align: center;
+            max-width: 700px;
+            padding: 20px;
+        }
+        
+        .page-content h1 {
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+        
+        .page-content p {
+            font-size: 17px;
+            line-height: 1.6;
+            color: #e0f2fe;
+        }
+        /* GDPR MODAL */
+        
+        .gdpr-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.82);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 16px;
+        }
+        
+        .gdpr-modal.hide {
+            display: none;
+        }
+        
+        .gdpr-box {
+            width: 440px;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 24px;
+            color: #111827;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+            animation: modalPop 0.25s ease-in-out;
+        }
+        
+        @keyframes modalPop {
+            from {
+                transform: scale(0.92);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .gdpr-box h2 {
+            color: #0f766e;
+            margin-bottom: 12px;
+            font-size: 22px;
+        }
+        
+        .gdpr-box p {
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        
+        .gdpr-box ul {
+            margin-left: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .gdpr-box li {
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+        
+        .consent-check {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            font-size: 13px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .consent-check input {
+            margin-top: 3px;
+        }
+        
+        .gdpr-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .gdpr-accept-btn,
+        .gdpr-policy-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        
+        .gdpr-accept-btn {
+            background: #0f766e;
+            color: white;
+        }
+        
+        .gdpr-accept-btn:hover {
+            background: #115e59;
+        }
+        
+        .gdpr-policy-btn {
+            background: #e0f2fe;
+            color: #075985;
+        }
+        
+        .gdpr-policy-btn:hover {
+            background: #bae6fd;
+        }
+        
+        .medical-icon {
+            width: 38px;
+            height: 38px;
+            display: block;
+        }
+        
+        .chat-toggle-btn {
+            position: fixed;
+            right: 26px;
+            bottom: 26px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 4px solid #ffffff;
+            background: linear-gradient(135deg, #0f766e, #0284c7);
+            color: white;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+            transition: 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-toggle-btn:hover {
+            transform: scale(1.1) rotate(8deg);
+            box-shadow: 0 22px 55px rgba(37, 99, 235, 0.45);
+        }
+        
+        .chat-toggle-btn.active {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+        }
+        
+        .chat-widget {
+            position: fixed;
+            right: 26px;
+            bottom: 110px;
+            z-index: 9998;
+            display: none;
+            animation: chatOpen 0.25s ease-in-out;
+        }
+        
+        .chat-widget.show {
+            display: block;
+        }
+        
+        @keyframes chatOpen {
+            from {
+                opacity: 0;
+                transform: translateY(25px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .chat-card {
+            width: 500px;
+            height: 780px;
+            background: #ffffff;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.38);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+        }
+        
+        .inside-close-btn {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 20;
+        }
+        
+        .inside-close-btn:hover {
+            background: rgba(255, 255, 255, 0.45);
+        }
+        
+        .chat-header {
+            background: linear-gradient(135deg, #0f766e, #0284c7);
+            color: white;
+            padding: 18px;
+        }
+        
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        
+        .logo {
+            width: 58px;
+            height: 58px;
+            background: white;
+            color: #0f766e;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
+            flex-shrink: 0;
+        }
+        
+        .chat-header h2 {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+        
+        .chat-header p {
+            font-size: 14px;
+            color: #ccfbf1;
+        }
+        
+        .status-pill {
+            margin-top: 10px;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.18);
+            color: #ecfeff;
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 999px;
+        }
+        
+        .translator-box {
+            margin-top: 14px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 11px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            backdrop-filter: blur(8px);
+        }
+        
+        .translator-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #ecfeff;
+        }
+        
+        .language-row {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .language-row select {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 12px;
+            outline: none;
+            font-weight: bold;
+            color: #0f172a;
+            background: white;
+        }
+        
+        .google-translator {
+            background: white;
+            border-radius: 12px;
+            padding: 6px;
+            color: #111827;
+            font-size: 12px;
+        }
+        
+        .lang-note {
+            font-size: 11px;
+            color: #e0f2fe;
+        }
+        
+        .notice-box {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 10px 14px;
+            font-size: 13px;
+            text-align: center;
+            border-bottom: 1px solid #fde68a;
+        }
+        
+        .chat-box {
+            flex: 1;
+            padding: 18px;
+            background: linear-gradient(rgba(240, 253, 250, 0.95), rgba(240, 253, 250, 0.95)), radial-gradient(circle at top, #ccfbf1, transparent 40%);
+            overflow-y: auto;
+        }
+        
+        .message {
+            max-width: 88%;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.55;
+            white-space: pre-line;
+            word-wrap: break-word;
+            animation: popIn 0.2s ease-in-out;
+        }
+        
+        @keyframes popIn {
+            from {
+                transform: translateY(5px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.22);
+        }
+        
+        .bot-message {
+            background: white;
+            color: #111827;
+            margin-right: auto;
+            border: 1px solid #ccfbf1;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 8px 18px rgba(15, 118, 110, 0.08);
+        }
+        
+        .report-panel {
+            padding: 11px;
+            background: linear-gradient(135deg, #ecfeff, #f0fdfa);
+            border-top: 1px solid #ccfbf1;
+        }
+        
+        .report-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #0f766e;
+            margin-bottom: 8px;
+        }
+        
+        .report-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .report-actions button {
+            border: none;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.25s ease;
+        }
+        
+        .download-btn {
+            background: #0f766e;
+            color: white;
+        }
+        
+        .email-btn {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .clear-btn {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .download-btn:hover,
+        .email-btn:hover,
+        .clear-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(0.95);
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 10px;
+            background: #ecfeff;
+            border-top: 1px solid #ccfbf1;
+        }
+        
+        .quick-actions button {
+            padding: 9px;
+            border: none;
+            border-radius: 11px;
+            background: #ccfbf1;
+            color: #0f766e;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+        
+        .quick-actions button:hover {
+            background: #99f6e4;
+            transform: translateY(-1px);
+        }
+        
+        .input-area {
+            display: flex;
+            padding: 14px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .input-area input {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #99f6e4;
+            border-radius: 13px;
+            outline: none;
+            font-size: 14px;
+        }
+        
+        .input-area input:focus {
+            border-color: #0f766e;
+            box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+        }
+        
+        .input-area button {
+            margin-left: 10px;
+            padding: 13px 18px;
+            border: none;
+            border-radius: 13px;
+            background: #0f766e;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+        
+        .input-area button:hover {
+            background: #115e59;
+            transform: translateY(-1px);
+        }
+        
+        @media (max-width: 520px) {
+            body {
+                padding: 8px;
+            }
+            .gdpr-box {
+                width: 100%;
+            }
+            .gdpr-actions {
+                grid-template-columns: 1fr;
+            }
+            .chat-widget {
+                right: 8px;
+                bottom: 88px;
+                width: calc(100% - 16px);
+            }
+            .chat-card {
+                width: 100%;
+                height: 86vh;
+                border-radius: 22px;
+            }
+            .chat-toggle-btn {
+                right: 18px;
+                bottom: 18px;
+                width: 62px;
+                height: 62px;
+            }
+            .medical-icon {
+                width: 34px;
+                height: 34px;
+            }
+            .chat-header h2 {
+                font-size: 18px;
+            }
+            .chat-header p {
+                font-size: 12px;
+            }
+            .logo {
+                width: 50px;
+                height: 50px;
+            }
+            .quick-actions {
+                grid-template-columns: 1fr 1fr;
+            }
+            .report-actions {
+                grid-template-columns: 1fr;
+            }
+            .language-row {
+                flex-direction: column;
+            }
+            .message {
+                font-size: 13px;
+                max-width: 92%;
+            }
+        }
+    </style>
+    <style>
+        body {
+            background: transparent !important;
+            pointer-events: none !important;
+        }
+        .page-content {
+            display: none !important;
+        }
+        .chat-widget, .chat-toggle-btn, .gdpr-modal {
+            pointer-events: auto !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- GDPR CONSENT MODAL -->
+    <div id="gdprModal" class="gdpr-modal">
+        <div class="gdpr-box">
+            <h2>🔐 Privacy & GDPR Notice</h2>
+
+            <p>
+                This Medical AI Assistant gives general health information only. Your health question may be processed by local AI to generate a response.
+            </p>
+
+            <ul>
+                <li>This chatbot is not a medical diagnosis.</li>
+                <li>Do not enter name, phone number, address, ID number, password, or exact location.</li>
+                <li>Chat history is stored only in this browser session.</li>
+                <li>You can download your report only when you choose.</li>
+                <li>You can clear chat history and withdraw consent anytime.</li>
+            </ul>
+
+            <label class="consent-check">
+                <input type="checkbox" id="consentCheckbox">
+                <span>I understand and agree to use this chatbot for general health information.</span>
+            </label>
+
+            <div class="gdpr-actions">
+                <button class="gdpr-accept-btn" onclick="acceptGDPRConsent()">Accept & Continue</button>
+                <button class="gdpr-policy-btn" onclick="openPrivacyPolicy()">View Policy</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <h1>AI Based Healthcare Assistant</h1>
+        <p>
+            Click the floating medical assistant icon at the bottom-right corner to open the chatbot.
+        </p>
+    </div>
+
+    <button id="chatToggleBtn" class="chat-toggle-btn" onclick="toggleChat()" aria-label="Open Medical Assistant">
+        <svg class="medical-icon" viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="32" r="30" fill="white" opacity="0.18" />
+            <path d="M22 18C22 14.6863 24.6863 12 28 12H36C39.3137 12 42 14.6863 42 18V22H46C49.3137 22 52 24.6863 52 28V36C52 39.3137 49.3137 42 46 42H42V46C42 49.3137 39.3137 52 36 52H28C24.6863 52 22 49.3137 22 46V42H18C14.6863 42 12 39.3137 12 36V28C12 24.6863 14.6863 22 18 22H22V18Z" fill="white"/>
+            <path d="M29 21H35V29H43V35H35V43H29V35H21V29H29V21Z" fill="#0f766e"/>
+            <circle cx="45" cy="18" r="4" fill="#ccfbf1"/>
+            <path d="M49 10L50.5 14L54.5 15.5L50.5 17L49 21L47.5 17L43.5 15.5L47.5 14L49 10Z" fill="#ffffff"/>
+        </svg>
+    </button>
+
+    <div id="chatWidget" class="chat-widget">
+
+        <div class="chat-card">
+
+            <button class="inside-close-btn" onclick="toggleChat()">×</button>
+
+            <div class="chat-header">
+
+                <div class="header-top">
+                    <div class="logo">
+                        <svg class="medical-icon" viewBox="0 0 64 64" fill="none">
+                            <circle cx="32" cy="32" r="30" fill="#0f766e" opacity="0.12" />
+                            <rect x="18" y="14" width="28" height="36" rx="8" fill="#0f766e"/>
+                            <circle cx="27" cy="28" r="3" fill="white"/>
+                            <circle cx="37" cy="28" r="3" fill="white"/>
+                            <path d="M26 38C29.5 41 34.5 41 38 38" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M29 6H35V14H29V6Z" fill="#0f766e"/>
+                            <path d="M29 18H35V24H41V30H35V36H29V30H23V24H29V18Z" fill="white"/>
+                        </svg>
+                    </div>
+
+                    <div>
+                        <h2>Medical AI Assistant</h2>
+                        <p>Global Lifestyle Disease Chatbot</p>
+                        <span class="status-pill">Safe health guidance • Not a diagnosis</span>
+                    </div>
+                </div>
+
+                <div class="translator-box">
+                    <div class="translator-title">🌐 Language Settings</div>
+
+                    <div class="language-row">
+                        <select id="replyLanguage">
+                            <option value="English">Reply in English</option>
+                            <option value="Tamil">Reply in Tamil</option>
+                            <option value="Hindi">Reply in Hindi</option>
+                            <option value="Telugu">Reply in Telugu</option>
+                            <option value="Malayalam">Reply in Malayalam</option>
+                            <option value="Kannada">Reply in Kannada</option>
+                        </select>
+                    </div>
+
+                    <div class="lang-note">
+                        Select reply language before sending your health question.
+                    </div>
+
+                    <div class="google-translator">
+                        <div id="google_translate_element"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="notice-box">
+                This chatbot gives general health information only. It is not a replacement for a doctor.
+            </div>
+
+            <div id="chatBox" class="chat-box">
+                <div class="bot-message message">
+                    Hello! I am your Medical AI Assistant. Accept the GDPR privacy notice and ask about diabetes, BP, obesity, fatty liver, PCOS, thyroid, stress, sleep, heart disease, or other lifestyle diseases.
+                </div>
+            </div>
+
+            <div class="report-panel">
+                <div class="report-title">📄 Chat Report Options</div>
+
+                <div class="report-actions">
+                    <button class="download-btn" type="button" onclick="downloadReport()">⬇ PDF Report</button>
+                    <button class="email-btn" type="button" onclick="emailReport()">📧 Email</button>
+                    <button class="clear-btn" type="button" onclick="clearChat()">🗑 Clear</button>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <button type="button" onclick="quickQuestion('What are the symptoms of diabetes?')">Diabetes</button>
+                <button type="button" onclick="quickQuestion('How to prevent high blood pressure?')">BP Tips</button>
+                <button type="button" onclick="quickQuestion('How to reduce belly fat safely?')">Obesity</button>
+                <button type="button" onclick="quickQuestion('What is fatty liver and how to prevent it?')">Fatty Liver</button>
+                <button type="button" onclick="quickQuestion('What are PCOS symptoms and lifestyle tips?')">PCOS</button>
+                <button type="button" onclick="quickQuestion('How to manage stress and sleep better?')">Stress</button>
+            </div>
+
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Type your health question..." autocomplete="off" />
+                <button type="button" onclick="sendMessage()">Send</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const gdprModal = document.getElementById("gdprModal");
+        const consentCheckbox = document.getElementById("consentCheckbox");
+        const chatBox = document.getElementById("chatBox");
+        const userInput = document.getElementById("userInput");
+        const replyLanguage = document.getElementById("replyLanguage");
+        const chatWidget = document.getElementById("chatWidget");
+        const chatToggleBtn = document.getElementById("chatToggleBtn");
+
+        const medicalButtonIcon = `
+            <svg class="medical-icon" viewBox="0 0 64 64" fill="none">
+                <circle cx="32" cy="32" r="30" fill="white" opacity="0.18" />
+                <path d="M22 18C22 14.6863 24.6863 12 28 12H36C39.3137 12 42 14.6863 42 18V22H46C49.3137 22 52 24.6863 52 28V36C52 39.3137 49.3137 42 46 42H42V46C42 49.3137 39.3137 52 36 52H28C24.6863 52 22 49.3137 22 46V42H18C14.6863 42 12 39.3137 12 36V28C12 24.6863 14.6863 22 18 22H22V18Z" fill="white"/>
+                <path d="M29 21H35V29H43V35H35V43H29V35H21V29H29V21Z" fill="#0f766e"/>
+                <circle cx="45" cy="18" r="4" fill="#ccfbf1"/>
+                <path d="M49 10L50.5 14L54.5 15.5L50.5 17L49 21L47.5 17L43.5 15.5L47.5 14L49 10Z" fill="#ffffff"/>
+            </svg>
+        `;
+
+        let chatHistory = [];
+
+        window.addEventListener("load", function() {
+            const consent = localStorage.getItem("gdprConsent");
+
+            if (consent === "accepted") {
+                gdprModal.classList.add("hide");
+            }
+        });
+
+        async function acceptGDPRConsent() {
+            if (!consentCheckbox.checked) {
+                alert("Please accept the privacy notice to continue.");
+                return;
+            }
+
+            try {
+                await fetch("http://127.0.0.1:8000/privacy/consent", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        consent_given: true,
+                        purpose: "Medical AI chatbot general health assistance"
+                    })
+                });
+            } catch (error) {
+                console.log("Consent API not reachable. Consent saved locally.");
+            }
+
+            localStorage.setItem("gdprConsent", "accepted");
+            gdprModal.classList.add("hide");
+        }
+
+        function openPrivacyPolicy() {
+            window.open("http://127.0.0.1:8000/privacy/policy", "_blank");
+        }
+
+        function toggleChat() {
+            chatWidget.classList.toggle("show");
+            chatToggleBtn.classList.toggle("active");
+
+            if (chatWidget.classList.contains("show")) {
+                chatToggleBtn.innerHTML = "×";
+            } else {
+                chatToggleBtn.innerHTML = medicalButtonIcon;
+            }
+        }
+
+        function getCurrentDateTime() {
+            const now = new Date();
+            return now.toLocaleString();
+        }
+
+        function saveToHistory(sender, text) {
+            chatHistory.push({
+                sender: sender,
+                text: text,
+                time: getCurrentDateTime()
+            });
+        }
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+
+            if (message === "") {
+                return;
+            }
+
+            const selectedLanguage = replyLanguage.value;
+
+            addMessage(message, "user-message message");
+            saveToHistory("User", message);
+
+            userInput.value = "";
+
+            const loadingText = "Analyzing your health question in " + selectedLanguage + "...";
+            addMessage(loadingText, "bot-message message", "loading");
+
+            const finalPrompt =
+                "Please reply in " + selectedLanguage + ". " +
+                "Use simple words. " +
+                "This is my health question: " + message;
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        message: finalPrompt,
+                        consent_given: localStorage.getItem("gdprConsent") === "accepted"
+                    })
+                });
+
+                const data = await response.json();
+
+                removeLoadingMessage();
+
+                if (data.reply) {
+                    addMessage(data.reply, "bot-message message");
+                    saveToHistory("Medical AI Assistant", data.reply);
+                } else {
+                    const noReply = "No reply received from backend.";
+                    addMessage(noReply, "bot-message message");
+                    saveToHistory("System", noReply);
+                }
+
+            } catch (error) {
+                removeLoadingMessage();
+
+                const errorMessage =
+                    "Error: Backend or Ollama is not running.\n\n" +
+                    "Please start both:\n" +
+                    "1. ollama run phi\n" +
+                    "2. python -m uvicorn main:app --reload";
+
+                addMessage(errorMessage, "bot-message message");
+                saveToHistory("System", errorMessage);
+            }
+        }
+
+        function addMessage(text, className, id = "") {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = className;
+            messageDiv.innerText = text;
+
+            if (id !== "") {
+                messageDiv.id = id;
+            }
+
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function removeLoadingMessage() {
+            const loadingMessage = document.getElementById("loading");
+
+            if (loadingMessage) {
+                loadingMessage.remove();
+            }
+        }
+
+        function quickQuestion(question) {
+            userInput.value = question;
+
+            if (!chatWidget.classList.contains("show")) {
+                toggleChat();
+            }
+
+            sendMessage();
+        }
+
+        async function downloadReport() {
+            if (!window.jspdf || !window.html2canvas) {
+                alert("PDF libraries are not loaded. Please check your internet connection and refresh the page.");
+                return;
+            }
+
+            const selectedLanguage = replyLanguage.value;
+            const labels = getReportLabels(selectedLanguage);
+
+            const reportDiv = document.createElement("div");
+
+            reportDiv.style.width = "794px";
+            reportDiv.style.padding = "35px";
+            reportDiv.style.background = "#ffffff";
+            reportDiv.style.color = "#111827";
+            reportDiv.style.fontFamily = "Arial, Helvetica, sans-serif";
+            reportDiv.style.lineHeight = "1.6";
+            reportDiv.style.position = "absolute";
+            reportDiv.style.left = "-9999px";
+            reportDiv.style.top = "0";
+
+            let conversationHTML = "";
+
+            if (chatHistory.length === 0) {
+                conversationHTML = `<p style="color:#6b7280;">${labels.noChat}</p>`;
+            } else {
+                chatHistory.forEach((item, index) => {
+                    const isUser = item.sender === "User";
+                    const senderLabel = isUser ? labels.user : labels.assistant;
+
+                    conversationHTML += `
+                        <div style="
+                            margin-bottom: 18px;
+                            padding: 14px;
+                            border-radius: 14px;
+                            border: 1px solid ${isUser ? "#bfdbfe" : "#99f6e4"};
+                            background: ${isUser ? "#eff6ff" : "#f0fdfa"};
+                        ">
+                            <div style="
+                                font-weight: bold;
+                                color: ${isUser ? "#1d4ed8" : "#0f766e"};
+                                margin-bottom: 6px;
+                            ">
+                                ${index + 1}. ${senderLabel} | ${item.time}
+                            </div>
+
+                            <div style="white-space: pre-line; font-size: 14px;">
+                                ${escapeHTML(item.text)}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            reportDiv.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, #0f766e, #0284c7);
+                    color: white;
+                    padding: 22px;
+                    border-radius: 18px;
+                    margin-bottom: 22px;
+                ">
+                    <h1 style="font-size: 24px; margin-bottom: 6px;">
+                        ${labels.title}
+                    </h1>
+                    <p style="font-size: 14px;">
+                        ${labels.subtitle}
+                    </p>
+                </div>
+
+                <div style="
+                    background: #f0fdfa;
+                    border: 1px solid #99f6e4;
+                    border-radius: 14px;
+                    padding: 16px;
+                    margin-bottom: 18px;
+                ">
+                    <h3 style="color:#0f766e; margin-bottom: 8px;">
+                        ${labels.reportDetails}
+                    </h3>
+                    <p><b>${labels.generatedOn}:</b> ${getCurrentDateTime()}</p>
+                    <p><b>${labels.selectedLanguage}:</b> ${selectedLanguage}</p>
+                    <p><b>GDPR Consent:</b> Accepted</p>
+                    <p><b>${labels.project}:</b> Global Lifestyle Disease Medical AI Assistant</p>
+                </div>
+
+                <div style="
+                    background: #fef3c7;
+                    border: 1px solid #f59e0b;
+                    border-radius: 14px;
+                    padding: 16px;
+                    margin-bottom: 22px;
+                    color: #92400e;
+                ">
+                    <h3 style="margin-bottom: 8px;">
+                        ${labels.disclaimerTitle}
+                    </h3>
+                    <p>${labels.disclaimerText}</p>
+                    <p style="margin-top: 8px;">
+                        GDPR Notice: This report was generated only after user consent. 
+                        Chat data is stored locally in the browser session only.
+                    </p>
+                </div>
+
+                <h2 style="color:#0f766e; margin-bottom: 14px;">
+                    ${labels.conversation}
+                </h2>
+
+                ${conversationHTML}
+
+                <div style="
+                    margin-top: 30px;
+                    padding-top: 15px;
+                    border-top: 1px solid #d1fae5;
+                    font-size: 12px;
+                    color: #64748b;
+                    text-align: center;
+                ">
+                    ${labels.footer}
+                </div>
+            `;
+
+            document.body.appendChild(reportDiv);
+
+            try {
+                const canvas = await html2canvas(reportDiv, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: "#ffffff"
+                });
+
+                const {
+                    jsPDF
+                } = window.jspdf;
+                const pdf = new jsPDF("p", "mm", "a4");
+
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+
+                const imgData = canvas.toDataURL("image/png");
+
+                const imgWidth = pageWidth;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft > 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                const fileName =
+                    "medical_ai_gdpr_chat_report_" +
+                    selectedLanguage.toLowerCase().replace(/\s+/g, "_") +
+                    ".pdf";
+
+                pdf.save(fileName);
+
+            } catch (error) {
+                alert("PDF generation failed. Please try again.");
+                console.error(error);
+            } finally {
+                document.body.removeChild(reportDiv);
+            }
+        }
+
+        function escapeHTML(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function getReportLabels(language) {
+            const labels = {
+                English: {
+                    title: "Medical AI Assistant Chat Report",
+                    subtitle: "Global Lifestyle Disease Medical AI Assistant",
+                    reportDetails: "Report Details",
+                    generatedOn: "Generated On",
+                    selectedLanguage: "Selected Language",
+                    project: "Project",
+                    disclaimerTitle: "Important Disclaimer",
+                    disclaimerText: "This report is generated by an AI chatbot for general health information only. It is not a medical diagnosis and does not replace consultation with a qualified doctor.",
+                    conversation: "Chat Conversation",
+                    user: "User",
+                    assistant: "Medical AI Assistant",
+                    noChat: "No chat conversation available.",
+                    footer: "Generated by Medical AI Assistant • General health information only"
+                },
+
+                Tamil: {
+                    title: "மருத்துவ AI உதவியாளர் உரையாடல் அறிக்கை",
+                    subtitle: "உலகளாவிய வாழ்க்கை முறை நோய் மருத்துவ AI உதவியாளர்",
+                    reportDetails: "அறிக்கை விவரங்கள்",
+                    generatedOn: "உருவாக்கப்பட்ட தேதி",
+                    selectedLanguage: "தேர்ந்தெடுக்கப்பட்ட மொழி",
+                    project: "திட்டம்",
+                    disclaimerTitle: "முக்கிய அறிவிப்பு",
+                    disclaimerText: "இந்த அறிக்கை AI chatbot மூலம் பொதுவான சுகாதார தகவல்களுக்காக மட்டுமே உருவாக்கப்பட்டது. இது மருத்துவ நோயறிதல் அல்ல; தகுதியான மருத்துவரின் ஆலோசனையை மாற்றாது.",
+                    conversation: "உரையாடல் விவரம்",
+                    user: "பயனர்",
+                    assistant: "மருத்துவ AI உதவியாளர்",
+                    noChat: "உரையாடல் எதுவும் இல்லை.",
+                    footer: "மருத்துவ AI உதவியாளர் மூலம் உருவாக்கப்பட்டது • பொதுவான சுகாதார தகவல் மட்டுமே"
+                },
+
+                Hindi: {
+                    title: "मेडिकल AI असिस्टेंट चैट रिपोर्ट",
+                    subtitle: "वैश्विक जीवनशैली रोग मेडिकल AI असिस्टेंट",
+                    reportDetails: "रिपोर्ट विवरण",
+                    generatedOn: "तैयार किया गया",
+                    selectedLanguage: "चयनित भाषा",
+                    project: "प्रोजेक्ट",
+                    disclaimerTitle: "महत्वपूर्ण सूचना",
+                    disclaimerText: "यह रिपोर्ट AI चैटबॉट द्वारा केवल सामान्य स्वास्थ्य जानकारी के लिए बनाई गई है। यह चिकित्सा निदान नहीं है और योग्य डॉक्टर की सलाह का विकल्प नहीं है।",
+                    conversation: "चैट बातचीत",
+                    user: "उपयोगकर्ता",
+                    assistant: "मेडिकल AI असिस्टेंट",
+                    noChat: "कोई चैट बातचीत उपलब्ध नहीं है।",
+                    footer: "मेडिकल AI असिस्टेंट द्वारा तैयार • केवल सामान्य स्वास्थ्य जानकारी"
+                },
+
+                Telugu: {
+                    title: "మెడికల్ AI అసిస్టెంట్ చాట్ రిపోర్ట్",
+                    subtitle: "గ్లోబల్ లైఫ్‌స్టైల్ డిసీజ్ మెడికల్ AI అసిస్టెంట్",
+                    reportDetails: "రిపోర్ట్ వివరాలు",
+                    generatedOn: "సృష్టించిన తేదీ",
+                    selectedLanguage: "ఎంచుకున్న భాష",
+                    project: "ప్రాజెక్ట్",
+                    disclaimerTitle: "ముఖ్యమైన గమనిక",
+                    disclaimerText: "ఈ రిపోర్ట్ AI chatbot ద్వారా సాధారణ ఆరోగ్య సమాచారం కోసం మాత్రమే రూపొందించబడింది. ఇది వైద్య నిర్ధారణ కాదు మరియు అర్హత కలిగిన వైద్యుడి సలహాను భర్తీ చేయదు.",
+                    conversation: "చాట్ సంభాషణ",
+                    user: "వినియోగదారు",
+                    assistant: "మెడికల్ AI అసిస్టెంట్",
+                    noChat: "చాట్ సంభాషణ అందుబాటులో లేదు.",
+                    footer: "మెడికల్ AI అసిస్టెంట్ ద్వారా రూపొందించబడింది • సాధారణ ఆరోగ్య సమాచారం మాత్రమే"
+                },
+
+                Malayalam: {
+                    title: "മെഡിക്കൽ AI അസിസ്റ്റന്റ് ചാറ്റ് റിപ്പോർട്ട്",
+                    subtitle: "ഗ്ലോബൽ ലൈഫ്‌സ്റ്റൈൽ ഡിസീസ് മെഡിക്കൽ AI അസിസ്റ്റന്റ്",
+                    reportDetails: "റിപ്പോർട്ട് വിശദാംശങ്ങൾ",
+                    generatedOn: "സൃഷ്ടിച്ച തീയതി",
+                    selectedLanguage: "തിരഞ്ഞെടുത്ത ഭാഷ",
+                    project: "പ്രോജക്റ്റ്",
+                    disclaimerTitle: "പ്രധാന അറിയിപ്പ്",
+                    disclaimerText: "ഈ റിപ്പോർട്ട് പൊതുവായ ആരോഗ്യ വിവരങ്ങൾക്കായി AI chatbot സൃഷ്ടിച്ചതാണ്. ഇത് മെഡിക്കൽ രോഗനിർണയം അല്ല; യോഗ്യനായ ഡോക്ടറുടെ ഉപദേശത്തിന് പകരമല്ല.",
+                    conversation: "ചാറ്റ് സംഭാഷണം",
+                    user: "ഉപയോക്താവ്",
+                    assistant: "മെഡിക്കൽ AI അസിസ്റ്റന്റ്",
+                    noChat: "ചാറ്റ് സംഭാഷണം ലഭ്യമല്ല.",
+                    footer: "മെഡിക്കൽ AI അസിസ്റ്റന്റ് സൃഷ്ടിച്ചത് • പൊതുവായ ആരോഗ്യ വിവരം മാത്രം"
+                },
+
+                Kannada: {
+                    title: "ಮೆಡಿಕಲ್ AI ಅಸಿಸ್ಟೆಂಟ್ ಚಾಟ್ ವರದಿ",
+                    subtitle: "ಜಾಗತಿಕ ಜೀವನಶೈಲಿ ರೋಗ ಮೆಡಿಕಲ್ AI ಅಸಿಸ್ಟೆಂಟ್",
+                    reportDetails: "ವರದಿ ವಿವರಗಳು",
+                    generatedOn: "ರಚಿಸಿದ ದಿನಾಂಕ",
+                    selectedLanguage: "ಆಯ್ಕೆ ಮಾಡಿದ ಭಾಷೆ",
+                    project: "ಪ್ರಾಜೆಕ್ಟ್",
+                    disclaimerTitle: "ಮುಖ್ಯ ಸೂಚನೆ",
+                    disclaimerText: "ಈ ವರದಿ ಸಾಮಾನ್ಯ ಆರೋಗ್ಯ ಮಾಹಿತಿಗಾಗಿ AI chatbot ಮೂಲಕ ರಚಿಸಲಾಗಿದೆ. ಇದು ವೈದ್ಯಕೀಯ ನಿರ್ಣಯವಲ್ಲ ಮತ್ತು ಅರ್ಹ ವೈದ್ಯರ ಸಲಹೆಗೆ ಪರ್ಯಾಯವಲ್ಲ.",
+                    conversation: "ಚಾಟ್ ಸಂಭಾಷಣೆ",
+                    user: "ಬಳಕೆದಾರ",
+                    assistant: "ಮೆಡಿಕಲ್ AI ಅಸಿಸ್ಟೆಂಟ್",
+                    noChat: "ಚಾಟ್ ಸಂಭಾಷಣೆ ಲಭ್ಯವಿಲ್ಲ.",
+                    footer: "ಮೆಡಿಕಲ್ AI ಅಸಿಸ್ಟೆಂಟ್ ಮೂಲಕ ರಚಿಸಲಾಗಿದೆ • ಸಾಮಾನ್ಯ ಆರೋಗ್ಯ ಮಾಹಿತಿ ಮಾತ್ರ"
+                }
+            };
+
+            return labels[language] || labels.English;
+        }
+
+        function generateEmailReportText() {
+            const selectedLanguage = replyLanguage.value;
+            const labels = getReportLabels(selectedLanguage);
+
+            let report = "";
+
+            report += labels.title + "\n";
+            report += "=================================\n\n";
+            report += labels.generatedOn + ": " + getCurrentDateTime() + "\n";
+            report += labels.selectedLanguage + ": " + selectedLanguage + "\n";
+            report += labels.project + ": Global Lifestyle Disease Medical AI Assistant\n";
+            report += "GDPR Consent: Accepted\n\n";
+
+            report += labels.disclaimerTitle + ":\n";
+            report += labels.disclaimerText + "\n\n";
+
+            report += "GDPR Notice:\n";
+            report += "This report was generated only after user consent. Chat data is stored locally in the browser session only.\n\n";
+
+            report += labels.conversation + ":\n";
+            report += "------------------\n\n";
+
+            if (chatHistory.length === 0) {
+                report += labels.noChat + "\n";
+            } else {
+                chatHistory.forEach((item, index) => {
+                    const isUser = item.sender === "User";
+                    const senderLabel = isUser ? labels.user : labels.assistant;
+
+                    report += (index + 1) + ". " + senderLabel + " [" + item.time + "]\n";
+                    report += item.text + "\n\n";
+                });
+            }
+
+            report += labels.footer + "\n";
+
+            return report;
+        }
+
+        function emailReport() {
+            const reportText = generateEmailReportText();
+
+            const email = prompt("Enter recipient email address:");
+
+            if (!email || email.trim() === "") {
+                alert("Email cancelled. Please enter a valid email address.");
+                return;
+            }
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailPattern.test(email.trim())) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+
+            const selectedLanguage = replyLanguage.value;
+            const subject = "Medical AI Assistant GDPR Chat Report - " + selectedLanguage;
+
+            const mailtoLink =
+                "mailto:" + encodeURIComponent(email.trim()) +
+                "?subject=" + encodeURIComponent(subject) +
+                "&body=" + encodeURIComponent(reportText);
+
+            window.location.href = mailtoLink;
+        }
+
+        async function clearChat() {
+            const confirmClear = confirm(
+                "Are you sure you want to clear chat history and withdraw GDPR consent?"
+            );
+
+            if (!confirmClear) {
+                return;
+            }
+
+            chatHistory = [];
+            localStorage.removeItem("gdprConsent");
+
+            try {
+                await fetch("http://127.0.0.1:8000/privacy/delete", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        user_id: "browser-session-user"
+                    })
+                });
+            } catch (error) {
+                console.log("Delete API not reachable. Local chat cleared.");
+            }
+
+            chatBox.innerHTML = `
+                <div class="bot-message message">
+                    Chat cleared. GDPR consent withdrawn. Please accept the privacy notice again to continue.
+                </div>
+            `;
+
+            gdprModal.classList.remove("hide");
+        }
+
+        userInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                    pageLanguage: "en",
+                    includedLanguages: "en,ta,hi,te,ml,kn",
+                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                },
+                "google_translate_element"
+            );
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        setInterval(() => {
+            const gdprModal = document.getElementById('gdprModal');
+            const chatWidget = document.getElementById('chatWidget');
+            const isModalOpen = gdprModal && !gdprModal.classList.contains('hide');
+            const isChatOpen = chatWidget && chatWidget.classList.contains('show');
+            let state = 'closed';
+            if (isModalOpen) state = 'modal';
+            else if (isChatOpen) state = 'chat';
+            window.parent.postMessage({ type: 'CHATBOT_STATE', state }, '*');
+        }, 100);
+    </script>
+</body>
+
+</html>

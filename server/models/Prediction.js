@@ -22,9 +22,34 @@ const predictionSchema = new mongoose.Schema(
     exerciseFrequency: { type: String, required: true },
     dietType: { type: String, required: true },
     riskLevel: { type: String },
-    riskPercentage: { type: Number },
-    possibleDiseaseCategory: { type: String },
-    suggestions: [{ type: String }],
+
+riskPercentage: { type: Number },
+
+predictionLabel: {
+  type: Number,
+  default: 0,
+},
+
+modelSource: {
+  type: String,
+  default: "Random Forest",
+},
+
+targetLabel: {
+  type: String,
+  default: "disease_risk",
+},
+
+diseaseRisks: {
+  cardiovascular: { type: Number, default: 0 },
+  shortBreathing: { type: Number, default: 0 },
+  obesity: { type: Number, default: 0 },
+},
+
+possibleDiseaseCategory: { type: String },
+
+suggestions: [{ type: String }],
+    
   },
   { timestamps: true }
 );

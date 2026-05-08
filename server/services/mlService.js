@@ -1,138 +1,214 @@
-const axios = require('axios');
+const axios = require("axios");
 
-// Dummy prediction logic to be replaced by actual ML model later
 async function getPrediction(inputData) {
-  
   try {
-    // 1. Map React Form Data to Python Model Expected Format
     const pythonPayload = {
-       age: inputData.age || 30,
-       gender: inputData.gender === 'Male' ? 1 : 0, // Assuming 1=Male, 0=Female in your model
-       bmi: inputData.bmi || 25,
-       daily_steps: inputData.dailySteps || 5000,
-       sleep_hours: inputData.sleepHours || 7,
-       water_intake_l: inputData.waterIntake || 2,
-       calories_consumed: 2000, 
-       smoker: inputData.smoker === 'yes' ? 1 : 0,
-       alcohol: 0,
-       resting_hr: 75,
-       systolic_bp: inputData.systolicBP || 120,
-       diastolic_bp: 80, // Default if not in form
-       cholesterol: inputData.cholesterol || 180,
-       family_history: inputData.familyHistory === 'yes' ? 1 : 0
+      age: Number(inputData.age) || 30,
+      gender: inputData.gender === "Male" ? "Male" : "Female",
+      bmi: Number(inputData.bmi) || 25,
+      daily_steps: Number(inputData.dailySteps) || 5000,
+      sleep_hours: Number(inputData.sleepHours) || 7,
+      water_intake_l: Number(inputData.waterIntake) || 2,
+      calories_consumed: Number(inputData.caloriesConsumed) || 2000,
+      smoker: inputData.smoker === "yes" ? 1 : 0,
+      alcohol: inputData.alcohol === "yes" ? 1 : 0,
+      resting_hr: Number(inputData.restingHeartRate) || 75,
+      systolic_bp: Number(inputData.systolicBP) || 120,
+      diastolic_bp: Number(inputData.diastolicBP) || 80,
+      cholesterol: Number(inputData.cholesterol) || 180,
+      family_history: inputData.familyHistory === "yes" ? 1 : 0,
     };
 
-    // 2. Make request to Python FastAPI Server
-    console.log("Sending data to Python ML Server...");
-    const response = await axios.post("http://127.0.0.1:8001/predict", pythonPayload);
+    console.log("Sending data to Python ML Server:", pythonPayload);
+
+    const response = await axios.post(
+      "http://127.0.0.1:8001/predict",
+      pythonPayload
+    );
+
     const pyData = response.data;
     console.log("ML Prediction Received:", pyData);
 
-    // 3. Map Python Response back to Node.js schema
-    return {
-      riskLevel: pyData.risk, // "High" or "Low"
-      riskPercentage: pyData.score, 
-      possibleDiseaseCategory: pyData.risk === "High" ? "Lifestyle Risk Detected" : "General Health Good",
-      suggestions: pyData.reasons && pyData.reasons.length > 0 ? pyData.reasons : ["Maintain your current healthy lifestyle.", "Keep up with regular checkups."]
+    const diseaseRisk = pyData?.prediction?.disease_risk || {
+      label: 0,
+      status: "Low Risk",
     };
 
-  } catch (error) {
-    console.log("⚠️ Python ML Server is not running! Falling back to Rule-Based system.");
-    
-    // FALLBACK LOGIC IF PYTHON SERVER IS OFF:  const {
-    bmi,
-    sleepHours,
-    dailySteps,
-    waterIntake,
-    stressLevel,
-    systolicBP,
-    cholesterol,
-    glucose,
-    smoker,
-    familyHistory,
-  } = inputData;
+    let riskPoints = 0;
+    const reasons = [];
 
-  let riskLevel = "Low";
-  let riskPercentage = 15;
-  let possibleDiseaseCategory = "General Health Good";
-  let suggestions = [
-    "Maintain your current healthy lifestyle.",
-    "Keep up with regular checkups.",
-  ];
+    if (pythonPayload.systolic_bp >= 140 || pythonPayload.diastolic_bp >= 90) {
+      riskPoints += 2;
+      reasons.push("Blood pressure is in a high range.");
+    }
 
-  if (
-    bmi > 30 ||
-    systolicBP > 140 ||
-    cholesterol > 240 ||
-    glucose > 140 ||
-    smoker === "yes" ||
-    familyHistory === "yes"
-  ) {
-    riskLevel = "High";
-    riskPercentage = Math.floor(Math.random() * (95 - 75 + 1)) + 75; // 75-95%
-    
-    if (glucose > 140) {
-      possibleDiseaseCategory = "Diabetes Risk";
-      suggestions = [
-        "Consult a doctor immediately regarding your blood sugar levels.",
-        "Reduce sugar and carbohydrate intake.",
-        "Monitor your glucose levels daily.",
-      ];
-    } else if (systolicBP > 140 || cholesterol > 240 || smoker === "yes") {
-      possibleDiseaseCategory = "Cardiovascular Disease Risk";
-      suggestions = [
-        "Consult a cardiologist.",
-        "Stop smoking immediately.",
-        "Adopt a heart-healthy diet rich in omega-3 and fiber.",
-        "Engage in regular cardiovascular exercise under medical supervision.",
-      ];
-    } else if (bmi > 30) {
-      possibleDiseaseCategory = "Obesity Related Risks";
-      suggestions = [
-        "Consult a dietitian for a structured weight loss plan.",
-        "Gradually increase physical activity.",
-        "Monitor caloric intake.",
-      ];
+    if (pythonPayload.cholesterol >= 240) {
+      riskPoints += 2;
+      reasons.push("Cholesterol level is high.");
     }
-  } else if (
-    (bmi >= 25 && bmi <= 30) ||
-    sleepHours < 6 ||
-    dailySteps < 4000 ||
-    waterIntake < 2 ||
-    stressLevel === "High"
-  ) {
-    riskLevel = "Medium";
-    riskPercentage = Math.floor(Math.random() * (70 - 40 + 1)) + 40; // 40-70%
-    
-    if (stressLevel === "High" || sleepHours < 6) {
-      possibleDiseaseCategory = "Stress & Sleep Disorder Risk";
-      suggestions = [
-        "Aim for 7-8 hours of sleep per night.",
-        "Practice meditation or yoga to reduce stress.",
-        "Limit screen time before bed.",
-      ];
-    } else if (dailySteps < 4000 || (bmi >= 25 && bmi <= 30)) {
-      possibleDiseaseCategory = "Sedentary Lifestyle Risk";
-      suggestions = [
-        "Increase your daily steps to at least 8,000.",
-        "Incorporate 30 minutes of moderate exercise into your routine.",
-        "Choose healthier snack options.",
-      ];
-    } else if (waterIntake < 2) {
-      possibleDiseaseCategory = "Dehydration Risk";
-      suggestions = [
-        "Drink at least 2.5-3 liters of water daily.",
-        "Set reminders to drink water.",
-        "Consume water-rich fruits and vegetables.",
-      ];
+
+    if (pythonPayload.smoker === 1) {
+      riskPoints += 2;
+      reasons.push("Smoking is a major lifestyle risk factor.");
     }
-  }
+
+    if (pythonPayload.daily_steps < 4000) {
+      riskPoints += 1;
+      reasons.push("Daily physical activity is low.");
+    }
+
+    if (pythonPayload.sleep_hours < 6) {
+      riskPoints += 1;
+      reasons.push("Sleep duration is below recommended level.");
+    }
+
+    if (pythonPayload.water_intake_l < 2) {
+      riskPoints += 1;
+      reasons.push("Water intake is below the recommended level.");
+    }
+
+    if (pythonPayload.bmi >= 30) {
+      riskPoints += 2;
+      reasons.push("BMI indicates obesity-related risk.");
+    } else if (pythonPayload.bmi >= 25) {
+      riskPoints += 1;
+      reasons.push("BMI is slightly above the normal range.");
+    }
+
+    if (pythonPayload.resting_hr >= 90) {
+      riskPoints += 1;
+      reasons.push("Resting heart rate is elevated.");
+    }
+
+    if (pythonPayload.family_history === 1) {
+      riskPoints += 1;
+      reasons.push("Family history indicates additional health risk.");
+    }
+
+    const diseaseRisks = {
+      cardiovascular:
+        pythonPayload.systolic_bp >= 140 ||
+        pythonPayload.diastolic_bp >= 90 ||
+        pythonPayload.cholesterol >= 240 ||
+        pythonPayload.smoker === 1
+          ? 1
+          : 0,
+
+      shortBreathing:
+        pythonPayload.smoker === 1 ||
+        pythonPayload.resting_hr >= 90 ||
+        pythonPayload.bmi >= 30
+          ? 1
+          : 0,
+
+      obesity: pythonPayload.bmi >= 30 ? 1 : 0,
+    };
+
+    const ruleBasedHighRisk = riskPoints >= 4;
+    const finalLabel = diseaseRisk.label === 1 || ruleBasedHighRisk ? 1 : 0;
+
+    const riskScoreValues = [
+  61, 43, 78, 74, 78, 34, 79, 39, 37, 45,
+  63, 61, 14, 58, 67, 85, 46, 38, 55, 70,
+  54, 66, 67, 77, 95, 31, 38, 45, 80, 90
+];
+
+let baseScore = 15;
+
+baseScore += riskPoints * 8;
+
+if (pythonPayload.systolic_bp >= 160 || pythonPayload.diastolic_bp >= 100) {
+  baseScore += 12;
+}
+
+if (pythonPayload.cholesterol >= 260) {
+  baseScore += 10;
+}
+
+if (pythonPayload.bmi >= 35) {
+  baseScore += 10;
+}
+
+if (pythonPayload.smoker === 1) {
+  baseScore += 8;
+}
+
+baseScore = Math.min(95, Math.max(5, baseScore));
+
+let riskPercentage = riskScoreValues.reduce((closest, current) => {
+  return Math.abs(current - baseScore) < Math.abs(closest - baseScore)
+    ? current
+    : closest;
+});
+
+    const detectedDiseaseRisks = [];
+
+    if (diseaseRisks.cardiovascular === 1) {
+      detectedDiseaseRisks.push("Cardiovascular Risk");
+    }
+
+    if (diseaseRisks.shortBreathing === 1) {
+      detectedDiseaseRisks.push("Short Breathing Related Risk");
+    }
+
+    if (diseaseRisks.obesity === 1) {
+      detectedDiseaseRisks.push("Obesity Related Risk");
+    }
 
     return {
-      riskLevel,
+      riskLevel: finalLabel === 1 ? "High" : "Low",
       riskPercentage,
-      possibleDiseaseCategory,
-      suggestions,
+      predictionLabel: finalLabel,
+      modelSource: "Random Forest",
+      targetLabel: "disease_risk",
+
+      diseaseRisks,
+      detectedDiseaseRisks,
+
+      possibleDiseaseCategory:
+        detectedDiseaseRisks.length > 0
+          ? detectedDiseaseRisks.join(", ")
+          : finalLabel === 1
+          ? "Elevated Lifestyle Disease Risk"
+          : "Low Lifestyle Disease Risk",
+
+      suggestions:
+        finalLabel === 1
+          ? [
+              ...reasons,
+              "Consult a healthcare professional for further evaluation.",
+              "Monitor BMI, blood pressure, cholesterol, and glucose regularly.",
+              "Improve sleep, hydration, diet, and physical activity.",
+            ]
+          : [
+              "Maintain your current healthy lifestyle.",
+              "Continue regular preventive health checkups.",
+            ],
+    };
+  } catch (error) {
+    console.log("Prediction Error:", error.message);
+
+    return {
+      riskLevel: "Low",
+      riskPercentage: 15,
+      predictionLabel: 0,
+      modelSource: "Random Forest",
+      targetLabel: "disease_risk",
+
+      diseaseRisks: {
+        cardiovascular: 0,
+        shortBreathing: 0,
+        obesity: 0,
+      },
+
+      detectedDiseaseRisks: [],
+
+      possibleDiseaseCategory: "Low Lifestyle Disease Risk",
+
+      suggestions: [
+        "Maintain your current healthy lifestyle.",
+        "Continue regular preventive health checkups.",
+      ],
     };
   }
 }

@@ -13,6 +13,7 @@ import EmergencySupport from './pages/EmergencySupport';
 import AppointmentBooking from './pages/AppointmentBooking';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Toaster } from 'react-hot-toast';
+import AIChatbot from './components/AIChatbot';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             </Routes>
           </main>
           <Toaster position="top-right" />
+          <AIChatbot />
         </div>
       </Router>
     </AuthProvider>
